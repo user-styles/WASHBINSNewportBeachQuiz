@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WASH BINS Newport Beach Knowledge Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .quiz-header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .quiz-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .quiz-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .intro-section {
+            padding: 40px;
+            text-align: center;
+        }
+
+        .contest-banner {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .intro-content h2 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .intro-content p {
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .contest-details {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 25px 0;
+            border-left: 5px solid #667eea;
+        }
+
+        .contest-details h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .contest-details ul {
+            text-align: left;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .contest-details li {
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .start-quiz-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 20px;
+        }
+
+        .start-quiz-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .quiz-content {
+            padding: 40px;
+            display: none;
+        }
+
+        .question-container {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .question-container.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-left: 5px solid #667eea;
+        }
+
+        .question h3 {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .question-number {
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .options {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .results {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .results.show {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .secret-code {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .secret-code h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .code-text {
+            font-family: 'Courier New', monospace;
+            font-size: 1.3rem;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: all;
+        }
+
+        .code-text:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.02);
+        }
+
+        .try-again {
+            background: #28a745;
+            color: white;
+            margin-top: 20px;
+        }
+
+        .try-again:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(40, 167, 69, 0.4);
+        }
+
+        .error-message {
+            background: #dc3545;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: bold;
+            text-align: center;
+            display: none;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes slideDown {
+            from { 
+                opacity: 0; 
+                transform: translateX(-50%) translateY(-20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateX(-50%) translateY(0); 
+            }
+        }
+
+        .incomplete-message {
+            background: #ffc107;
+            color: #856404;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .quiz-header h1 {
+                font-size: 2rem;
+            }
+            
+            .quiz-content, .intro-section {
+                padding: 20px;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .intro-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .intro-content p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1>🎯 WASH BINS Newport Beach Knowledge Quiz</h1>
+            <p>Test your knowledge and unlock exclusive sweepstakes bonus entries!</p>
+        </div>
+        
+        <!-- Intro Section -->
+        <div class="intro-section" id="introSection">
+            <img src="https://user-assets.out.sh/user-assets/2289086/SaO9YE7SUUx3eU1u/-100-amazon-gift-card-sweepstakes-giveaway-adverti.jpg" alt="WASH BINS Newport Beach $100 Amazon Gift Card Contest" class="contest-banner">
+            
+            <div class="intro-content">
+                <h2>🎁 $100 Amazon Gift Card Contest - Bonus Quiz</h2>
+                <p>This quiz is part of the WASH BINS Newport Beach $100 Amazon Gift Card Contest. Complete it perfectly to unlock a secret bonus code worth <strong>50 extra entries</strong> in the sweepstakes!</p>
+                
+                <div class="contest-details">
+                    <h3>How It Works:</h3>
+                    <ul>
+                        <li>🎯 Start the quiz. You'll be asked five multiple-choice questions.</li>
+                        <li>🔍 Search Google Maps for "WASH BINS Newport Beach".</li>
+                        <li>🌐 Open the business listing to find the answers.</li>
+                        <li>🎁 Score 100% to get a secret code for 50 bonus entries.</li>
+                    </ul>
+                </div>
+                
+                <p><strong>💡 All answers can be found by exploring the WASH BINS Newport Beach Google Maps listing.</strong><br>
+                Just search Google Maps for "WASH BINS Newport Beach" to find the business!</p>
+                
+                <button class="start-quiz-btn" onclick="startQuiz()">Start Quiz</button>
+            </div>
+        </div>
+        
+        <!-- Quiz Content -->
+        <div class="quiz-content" id="quizContent">
+            <div style="background: #e8f4fd; border: 2px solid #0066cc; border-radius: 10px; padding: 20px; margin-bottom: 30px; text-align: center;">
+                <p style="font-size: 1.2rem; font-weight: bold; color: #0066cc; margin: 0; line-height: 1.5;">
+                    💡 All answers are found in the WASH BINS Newport Beach Google Maps listing. Simply search Google Maps for "WASH BINS Newport Beach" to find the business.
+                </p>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <!-- Question 1: Quarterly Subscription Price -->
+            <div class="question-container active" id="question1">
+                <div class="question">
+                    <div class="question-number">Question 1 of 5</div>
+                    <h3>First, search Google Maps for "WASH BINS Newport Beach" and click on our business listing to open the full profile. From there, click through to our official website. Scroll down to the section with the heading "BIN CLEANING PRICING." What is the per-bin price for a quarterly subscription?</h3>
+                    <div class="options">
+                        <div class="option" data-value="A">A. $39 per bin</div>
+                        <div class="option" data-value="B">B. $49 per bin</div>
+                        <div class="option" data-value="C">C. $59 per bin</div>
+                        <div class="option" data-value="D">D. $69 per bin</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 2: Business Hours -->
+            <div class="question-container" id="question2">
+                <div class="question">
+                    <div class="question-number">Question 2 of 5</div>
+                    <h3>Go back to our business listing on Google Maps and from the "Overview" section, look at the business hours. What are our operating hours on weekdays (Monday through Friday)?</h3>
+                    <div class="options">
+                        <div class="option" data-value="A">A. 7:00 am - 5:00 pm</div>
+                        <div class="option" data-value="B">B. 8:30 am - 4:00 pm</div>
+                        <div class="option" data-value="C">C. 9:00 am - 3:00 pm</div>
+                        <div class="option" data-value="D">D. Open 24 hours</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 3: Yellow Truck Photo Text -->
+            <div class="question-container" id="question3">
+                <div class="question">
+                    <div class="question-number">Question 3 of 5</div>
+                    <h3>From the business listing on Google Maps, go to the "Photos" section. Look at the third media, which shows a yellow truck. What is the text written in red in the photo?</h3>
+                    <div class="options">
+                        <div class="option" data-value="A">A. WASH BINS - Trash Can Cleaning</div>
+                        <div class="option" data-value="B">B. Sign up online or call today!</div>
+                        <div class="option" data-value="C">C. Professional Bin Cleaning Service</div>
+                        <div class="option" data-value="D">D. Fast & Reliable Service</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 4: Zip Code -->
+            <div class="question-container" id="question4">
+                <div class="question">
+                    <div class="question-number">Question 4 of 5</div>
+                    <h3>From the business listing on Google Maps, go to the "Overview" section. What is the zip code for our Newport Beach location?</h3>
+                    <div class="options">
+                        <div class="option" data-value="A">A. 92660</div>
+                        <div class="option" data-value="B">B. 92663</div>
+                        <div class="option" data-value="C">C. 92625</div>
+                        <div class="option" data-value="D">D. 92661</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 5: Phone Number -->
+            <div class="question-container" id="question5">
+                <div class="question">
+                    <div class="question-number">Question 5 of 5</div>
+                    <h3>From the business listing on Google Maps, go to the "Overview" section. Copy the phone number for the business, and paste it below.</h3>
+                    <input type="text" class="text-input" id="phoneInput" placeholder="Enter the phone number exactly as shown...">
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" id="prevButton" style="display: none;">Previous</button>
+                <button class="btn btn-primary" id="nextButton">Next</button>
+                <button class="btn btn-primary" id="submitButton" style="display: none;">Submit Quiz</button>
+            </div>
+            
+            <div class="error-message" id="errorMessage"></div>
+        </div>
+
+        <div class="results" id="resultsSection">
+            <div class="score-display" id="scoreDisplay"></div>
+            <div id="resultMessage"></div>
+        </div>
+    </div>
+
+    <script>
+        // Quiz state
+        let currentQuestion = 1;
+        const totalQuestions = 5;
+        let userAnswers = {};
+        
+        // Correct answers
+        const correctAnswers = {
+            1: 'A', // $39 per bin
+            2: 'D', // Open 24 hours
+            3: 'B', // Sign up online or call today!
+            4: 'A', // 92660
+            5: 'any' // Accept any phone number input
+        };
+
+        // Start quiz function
+        function startQuiz() {
+            document.getElementById('introSection').style.display = 'none';
+            document.getElementById('quizContent').style.display = 'block';
+            initQuiz();
+        }
+
+        // Initialize quiz
+        function initQuiz() {
+            updateProgressBar();
+            setupOptionClicks();
+            updateNavigationButtons();
+        }
+
+        // Update progress bar
+        function updateProgressBar() {
+            const progress = ((currentQuestion - 1) / totalQuestions) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        // Setup option click handlers
+        function setupOptionClicks() {
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove selection from siblings
+                    const siblings = this.parentElement.querySelectorAll('.option');
+                    siblings.forEach(sibling => sibling.classList.remove('selected'));
+                    
+                    // Add selection to clicked option
+                    this.classList.add('selected');
+                    
+                    // Store answer
+                    const questionNum = getCurrentQuestionNumber();
+                    userAnswers[questionNum] = this.getAttribute('data-value');
+                });
+            });
+        }
+
+        // Get current question number
+        function getCurrentQuestionNumber() {
+            return currentQuestion;
+        }
+
+        // Copy code to clipboard
+        function copyCodeToClipboard() {
+            const code = 'WASHBINS50BONUS';
+            
+            // Try modern clipboard API first
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(code).then(() => {
+                    showCopyAlert();
+                }).catch(() => {
+                    // Fallback if modern API fails
+                    fallbackCopyToClipboard(code);
+                });
+            } else {
+                // Fallback for older browsers
+                fallbackCopyToClipboard(code);
+            }
+        }
+
+        // Fallback copy method
+        function fallbackCopyToClipboard(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                showCopyAlert();
+            } catch (err) {
+                console.error('Copy failed:', err);
+                alert('Copy failed. Please manually copy: ' + text);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        // Show copy success alert
+        function showCopyAlert() {
+            const alertDiv = document.createElement('div');
+            alertDiv.innerHTML = '✅ Code copied to clipboard!';
+            alertDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #28a745;
+                color: white;
+                padding: 12px 24px;
+                border-radius: 8px;
+                font-weight: bold;
+                z-index: 1000;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                animation: slideDown 0.3s ease-out;
+            `;
+            
+            document.body.appendChild(alertDiv);
+            
+            // Remove after 2 seconds
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 2000);
+        }
+
+        // Show error message
+        function showErrorMessage(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Validate current question
+        function validateCurrentQuestion() {
+            if (currentQuestion === 5) {
+                // Phone number question
+                const phoneValue = document.getElementById('phoneInput').value.trim();
+                if (!phoneValue) {
+                    showErrorMessage('Please enter the phone number before continuing.');
+                    return false;
+                }
+                userAnswers[5] = phoneValue;
+                return true;
+            } else {
+                // Multiple choice question
+                const selectedOption = document.querySelector(`#question${currentQuestion} .option.selected`);
+                if (!selectedOption) {
+                    showErrorMessage('Please select an answer before continuing.');
+                    return false;
+                }
+                return true;
+            }
+        }
+
+        // Show specific question
+        function showQuestion(questionNum) {
+            // Hide all questions
+            document.querySelectorAll('.question-container').forEach(container => {
+                container.classList.remove('active');
+            });
+            
+            // Show target question
+            document.getElementById(`question${questionNum}`).classList.add('active');
+            
+            currentQuestion = questionNum;
+            updateProgressBar();
+            updateNavigationButtons();
+        }
+
+        // Update navigation buttons
+        function updateNavigationButtons() {
+            const prevBtn = document.getElementById('prevButton');
+            const nextBtn = document.getElementById('nextButton');
+            const submitBtn = document.getElementById('submitButton');
+            
+            // Previous button
+            prevBtn.style.display = currentQuestion > 1 ? 'block' : 'none';
+            
+            // Next/Submit button
+            if (currentQuestion === totalQuestions) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'block';
+            } else {
+                nextBtn.style.display = 'block';
+                submitBtn.style.display = 'none';
+            }
+        }
+
+        // Next question
+        function nextQuestion() {
+            if (validateCurrentQuestion()) {
+                if (currentQuestion < totalQuestions) {
+                    showQuestion(currentQuestion + 1);
+                }
+            }
+        }
+
+        // Previous question
+        function previousQuestion() {
+            if (currentQuestion > 1) {
+                showQuestion(currentQuestion - 1);
+            }
+        }
+
+        // Validate phone number (accept any input for question 5)
+        function isValidPhoneNumber(phone) {
+            // Accept any non-empty phone input
+            return phone && phone.trim().length > 0;
+        }
+
+        // Submit quiz
+        function submitQuiz() {
+            if (!validateCurrentQuestion()) {
+                return;
+            }
+
+            let score = 0;
+            
+            // Check answers
+            for (let i = 1; i <= 4; i++) {
+                if (userAnswers[i] === correctAnswers[i]) {
+                    score++;
+                }
+            }
+            
+            // Check phone number
+            if (userAnswers[5] && isValidPhoneNumber(userAnswers[5])) {
+                score++;
+            }
+
+            showResults(score);
+        }
+
+        // Show results
+        function showResults(score) {
+            document.getElementById('quizContent').style.display = 'none';
+            document.getElementById('resultsSection').classList.add('show');
+            
+            const percentage = Math.round((score / totalQuestions) * 100);
+            document.getElementById('scoreDisplay').textContent = percentage + '%';
+            
+            const resultMessage = document.getElementById('resultMessage');
+            
+            if (percentage === 100) {
+                resultMessage.innerHTML = `
+                    <h2>🎉 Congratulations! Perfect Score!</h2>
+                    <p>You've demonstrated excellent knowledge of WASH BINS Newport Beach!</p>
+                    <div class="secret-code">
+                        <h3>🎁 Your Secret Sweepstakes Bonus Code:</h3>
+                        <div class="code-text" onclick="copyCodeToClipboard()" title="Click to copy">WASHBINS50BONUS</div>
+                        <p style="margin-top: 15px; font-size: 0.9rem;">Click the code above to copy it! Use this code to get 50 extra entries in our sweepstakes giveaway!</p>
+                    </div>
+                    <div style="background: #e8f4fd; border: 2px solid #0066cc; border-radius: 10px; padding: 20px; margin: 20px 0;">
+                        <h3 style="color: #0066cc; margin-bottom: 15px;">🏆 Enter Sweepstakes Now</h3>
+                        <p style="color: #0066cc; margin-bottom: 10px;">Search Google Maps for <strong>"WASH BINS Newport Beach"</strong> to find our listing and enter the contest!</p>
+                        <p style="color: #555; font-size: 0.9rem;">Look for the contest entry form to redeem your code.</p>
+                    </div>
+                `;
+            } else {
+                resultMessage.innerHTML = `
+                    <h2>Good effort!</h2>
+                    <p>You scored ${score} out of ${totalQuestions} questions correctly.</p>
+                    <div class="incomplete-message">
+                        You need a perfect score of 100% to unlock the secret bonus code. 
+                        Review the Google Maps listing and try again!
+                    </div>
+                    <button class="btn try-again" onclick="restartQuiz()">Take Quiz Again</button>
+                `;
+            }
+        }
+
+        // Restart quiz
+        function restartQuiz() {
+            currentQuestion = 1;
+            userAnswers = {};
+            
+            // Clear all selections
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Clear phone input
+            document.getElementById('phoneInput').value = '';
+            
+            // Show quiz content
+            document.getElementById('quizContent').style.display = 'block';
+            document.getElementById('resultsSection').classList.remove('show');
+            
+            showQuestion(1);
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('nextButton').addEventListener('click', nextQuestion);
+            document.getElementById('prevButton').addEventListener('click', previousQuestion);
+            document.getElementById('submitButton').addEventListener('click', submitQuiz);
+        });
+    </script>
+</body>
+</html>
